@@ -1,1 +1,63 @@
-<p>login works!</p>
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <div class="logo">
+        <mat-icon>inventory_2</mat-icon>
+        <h1>NexStock</h1>
+      </div>
+      <p class="subtitulo">Gestão de Inventário</p>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="entrar()">
+
+        <mat-form-field appearance="outline" class="campo-full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="seu@email.com">
+          <mat-icon matPrefix>email</mat-icon>
+          @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+            <mat-error>Email é obrigatório</mat-error>
+          }
+          @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+            <mat-error>Email inválido</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo-full">
+          <mat-label>Senha</mat-label>
+          <input matInput [type]="mostrarSenha ? 'text' : 'password'" formControlName="senha">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="mostrarSenha = !mostrarSenha">
+            <mat-icon>{{ mostrarSenha ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('senha')?.hasError('required') && form.get('senha')?.touched) {
+            <mat-error>Senha é obrigatória</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo-full">
+          <mat-label>ID do Contrato</mat-label>
+          <input matInput formControlName="contratoId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          <mat-icon matPrefix>badge</mat-icon>
+          @if (form.get('contratoId')?.hasError('required') && form.get('contratoId')?.touched) {
+            <mat-error>ID do contrato é obrigatório</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-entrar"
+          [disabled]="form.invalid || carregando">
+          @if (carregando) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Entrar
+          }
+        </button>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
