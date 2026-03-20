@@ -1,1 +1,90 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <h2 class="titulo">Dashboard</h2>
+
+  @if (carregando) {
+    <div class="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <div class="cards-grid">
+      <mat-card class="card card-azul" routerLink="/produtos">
+        <mat-card-content>
+          <div class="card-info">
+            <div>
+              <p class="card-label">Total de Produtos</p>
+              <p class="card-valor">{{ totalProdutos }}</p>
+            </div>
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="card card-verde">
+        <mat-card-content>
+          <div class="card-info">
+            <div>
+              <p class="card-label">Estoque Total</p>
+              <p class="card-valor">{{ estoqueTotal }}</p>
+            </div>
+            <mat-icon>warehouse</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="card card-roxo" routerLink="/clientes">
+        <mat-card-content>
+          <div class="card-info">
+            <div>
+              <p class="card-label">Total de Clientes</p>
+              <p class="card-valor">{{ totalClientes }}</p>
+            </div>
+            <mat-icon>people</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="card card-laranja">
+        <mat-card-content>
+          <div class="card-info">
+            <div>
+              <p class="card-label">Clientes Ativos</p>
+              <p class="card-valor">{{ clientesAtivos }}</p>
+            </div>
+            <mat-icon>person_check</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    @if (produtosBaixoEstoque.length > 0) {
+      <mat-card class="tabela-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon color="warn">warning</mat-icon>
+            Produtos com Baixo Estoque
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Código de Barras</th>
+                <th>Estoque</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of produtosBaixoEstoque; track p.id) {
+                <tr>
+                  <td>{{ p.nome }}</td>
+                  <td>{{ p.codigoBarras || '-' }}</td>
+                  <td class="estoque-baixo">{{ p.estoque }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</div>

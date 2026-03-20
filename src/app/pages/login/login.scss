@@ -61,3 +61,18 @@
   justify-content: center;
   gap: 8px;
 }
+
+.link-setup {
+  text-align: center;
+  margin-top: 16px;
+  color: #666;
+  font-size: 14px;
+
+  a {
+    color: #1565c0;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+} 

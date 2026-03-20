@@ -1,0 +1,169 @@
+<div class="setup-container">
+  <mat-card class="setup-card">
+
+    @if (!concluido) {
+      <mat-card-header>
+        <div class="logo">
+          <mat-icon>inventory_2</mat-icon>
+          <h1>NexStock</h1>
+        </div>
+        <p class="subtitulo">Configure sua conta em poucos passos</p>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-stepper orientation="vertical" linear #stepper>
+
+          <!-- Passo 1: Dados da empresa -->
+          <mat-step [stepControl]="formCliente" label="Dados da Empresa">
+            <form [formGroup]="formCliente" class="step-form">
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Nome da Empresa</mat-label>
+                <input matInput formControlName="nome">
+                <mat-icon matPrefix>business</mat-icon>
+                @if (formCliente.get('nome')?.hasError('required') && formCliente.get('nome')?.touched) {
+                  <mat-error>Nome é obrigatório</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-icon matPrefix>email</mat-icon>
+                @if (formCliente.get('email')?.invalid && formCliente.get('email')?.touched) {
+                  <mat-error>Email válido é obrigatório</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>CNPJ/CPF (opcional)</mat-label>
+                <input matInput formControlName="documento">
+                <mat-icon matPrefix>badge</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Telefone (opcional)</mat-label>
+                <input matInput formControlName="telefone">
+                <mat-icon matPrefix>phone</mat-icon>
+              </mat-form-field>
+
+              <div class="step-acoes">
+                <button mat-raised-button color="primary" matStepperNext
+                  [disabled]="formCliente.invalid">
+                  Próximo
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Passo 2: Plano -->
+          <mat-step [stepControl]="formPlano" label="Configurar Plano">
+            <form [formGroup]="formPlano" class="step-form">
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Nome do Plano</mat-label>
+                <input matInput formControlName="nome">
+                <mat-icon matPrefix>workspace_premium</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Preço (R$)</mat-label>
+                <input matInput type="number" formControlName="preco">
+                <mat-icon matPrefix>attach_money</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Duração (dias)</mat-label>
+                <input matInput type="number" formControlName="duracaoDias">
+                <mat-icon matPrefix>calendar_today</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Máximo de Dispositivos</mat-label>
+                <input matInput type="number" formControlName="maxDispositivos">
+                <mat-icon matPrefix>devices</mat-icon>
+              </mat-form-field>
+
+              <div class="step-acoes">
+                <button mat-button matStepperPrevious>Voltar</button>
+                <button mat-raised-button color="primary" matStepperNext
+                  [disabled]="formPlano.invalid">
+                  Próximo
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Passo 3: Usuário Admin -->
+          <mat-step [stepControl]="formUsuario" label="Criar Usuário Administrador">
+            <form [formGroup]="formUsuario" class="step-form">
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Seu Nome</mat-label>
+                <input matInput formControlName="nome">
+                <mat-icon matPrefix>person</mat-icon>
+                @if (formUsuario.get('nome')?.hasError('required') && formUsuario.get('nome')?.touched) {
+                  <mat-error>Nome é obrigatório</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Email de Acesso</mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-icon matPrefix>email</mat-icon>
+                @if (formUsuario.get('email')?.invalid && formUsuario.get('email')?.touched) {
+                  <mat-error>Email válido é obrigatório</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-full">
+                <mat-label>Senha</mat-label>
+                <input matInput type="password" formControlName="senha">
+                <mat-icon matPrefix>lock</mat-icon>
+                @if (formUsuario.get('senha')?.hasError('minlength') && formUsuario.get('senha')?.touched) {
+                  <mat-error>Mínimo 6 caracteres</mat-error>
+                }
+              </mat-form-field>
+
+              <div class="step-acoes">
+                <button mat-button matStepperPrevious>Voltar</button>
+                <button mat-raised-button color="primary"
+                  [disabled]="formUsuario.invalid || salvando"
+                  (click)="concluirSetup()">
+                  @if (salvando) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                  } @else {
+                    Concluir Setup
+                  }
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+        </mat-stepper>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <p class="link-login">
+          Já tem conta?
+          <a (click)="irParaLogin()">Fazer login</a>
+        </p>
+      </mat-card-footer>
+    }
+
+    @if (concluido) {
+      <div class="sucesso">
+        <mat-icon class="icone-sucesso">check_circle</mat-icon>
+        <h2>Setup Concluído! 🎉</h2>
+        <p>Sua conta foi configurada com sucesso.</p>
+        <p class="contrato-id">
+          <strong>ID do Contrato:</strong><br>
+          <code>{{ contratoIdGerado }}</code>
+        </p>
+        <p class="instrucao">Guarde o ID do contrato — você precisará dele para fazer login.</p>
+        <button mat-raised-button color="primary" (click)="irParaLogin()">
+          <mat-icon>login</mat-icon>
+          Ir para Login
+        </button>
+      </div>
+    }
+
+  </mat-card>
+</div>
