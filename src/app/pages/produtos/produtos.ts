@@ -67,17 +67,7 @@ export class Produtos implements OnInit {
   }
 
   carregar(): void {
-    const contratoId = this.tokenService.getContratoId();
-    if (!contratoId) return;
-
-    this.carregando = true;
-    this.produtoService.listar(contratoId).subscribe({
-      next: (dados) => {
-        this.produtos = dados;
-        this.carregando = false;
-      },
-      error: () => { this.carregando = false; }
-    });
+   
   }
 
   abrirFormulario(produto?: ProdutoResponse): void {
@@ -104,48 +94,22 @@ export class Produtos implements OnInit {
   salvar(): void {
     if (this.form.invalid) return;
 
-    const contratoId = this.tokenService.getContratoId()!;
+    
     this.salvando = true;
 
     const request = {
       ...this.form.value,
-      contratoId,
       dispositivoId: this.dispositivoId
     };
 
     const operacao = this.editando
-      ? this.produtoService.atualizar(contratoId, this.editando.id, request)
-      : this.produtoService.criar(request);
-
-    operacao.subscribe({
-      next: () => {
-        this.snackBar.open(
-          this.editando ? 'Produto atualizado!' : 'Produto criado!',
-          'Fechar', { duration: 3000 }
-        );
-        this.fecharFormulario();
-        this.carregar();
-        this.salvando = false;
-      },
-      error: () => {
-        this.snackBar.open('Erro ao salvar produto.', 'Fechar', { duration: 3000 });
-        this.salvando = false;
-      }
-    });
+      
+    
   }
 
   deletar(produto: ProdutoResponse): void {
     if (!confirm(`Deseja remover "${produto.nome}"?`)) return;
 
-    const contratoId = this.tokenService.getContratoId()!;
-    this.produtoService.deletar(contratoId, produto.id, this.dispositivoId).subscribe({
-      next: () => {
-        this.snackBar.open('Produto removido.', 'Fechar', { duration: 3000 });
-        this.carregar();
-      },
-      error: () => {
-        this.snackBar.open('Erro ao remover produto.', 'Fechar', { duration: 3000 });
-      }
-    });
+    
   }
 }

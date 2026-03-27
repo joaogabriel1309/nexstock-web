@@ -32,16 +32,7 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const contratoId = this.tokenService.getContratoId();
-    if (!contratoId) return;
 
-    this.produtoService.listar(contratoId).subscribe({
-      next: (dados) => {
-        this.produtos = dados;
-        this.carregando = false;
-      },
-      error: () => { this.carregando = false; }
-    });
 
   }
 

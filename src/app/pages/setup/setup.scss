@@ -1,3 +1,4 @@
+
 .setup-container {
   min-height: 100vh;
   display: flex;
@@ -121,4 +122,111 @@
     font-weight: 500;
     margin-bottom: 24px;
   }
+}
+.planos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.plano-card-moderno {
+  position: relative;
+  display: block;
+  padding: 24px;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  background: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    border-color: #3f51b5;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  &.selecionado {
+    border-color: #3f51b5;
+    background-color: #f5f7ff;
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.15);
+
+    &::after {
+      content: 'check_circle';
+      font-family: 'Material Icons';
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      color: #3f51b5;
+      font-size: 24px;
+    }
+  }
+}
+
+.plano-header {
+  text-align: center;
+  margin-bottom: 16px;
+
+  .badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3f51b5;
+    color: white;
+    font-size: 10px;
+    padding: 2px 12px;
+    border-radius: 0 0 8px 8px;
+    font-weight: bold;
+  }
+
+  .plano-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: #5c6bc0;
+    margin-bottom: 8px;
+  }
+
+  .plano-titulo {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+}
+
+.plano-preco-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: #3f51b5;
+
+  .moeda { font-size: 14px; font-weight: bold; margin-right: 2px; }
+  .valor { font-size: 28px; font-weight: 800; }
+  .periodo { font-size: 12px; color: #757575; margin-left: 4px; }
+}
+
+.plano-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #616161;
+    margin-bottom: 8px;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; color: #4caf50; }
+  }
+}
+
+::ng-deep .radio-escondido {
+  display: none !important;
 }

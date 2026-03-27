@@ -21,9 +21,6 @@ export class TokenService {
     return raw ? JSON.parse(raw) : null;
   }
 
-  getContratoId(): string | null {
-    return this.getUsuario()?.contratoId ?? null;
-  }
 
   limpar(): void {
     localStorage.removeItem(TOKEN_KEY);

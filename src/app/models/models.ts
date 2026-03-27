@@ -108,3 +108,15 @@ export interface UsuarioResquest {
   senha: string;
   role: string;
 }
+
+// Seput
+export interface SetupRequest {
+    empresaNome: string;
+    empresaEmail: string;
+    empresaCpfCnpj: string;
+    empresaTelefone: string;
+    adminNome: string;
+    adminEmail: string;
+    adminSenha: string;
+    planoId: string;
+}

@@ -33,16 +33,7 @@
           @if (form.get('senha')?.hasError('required') && form.get('senha')?.touched) {
             <mat-error>Senha é obrigatória</mat-error>
           }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="campo-full">
-          <mat-label>ID do Contrato</mat-label>
-          <input matInput formControlName="contratoId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-          <mat-icon matPrefix>badge</mat-icon>
-          @if (form.get('contratoId')?.hasError('required') && form.get('contratoId')?.touched) {
-            <mat-error>ID do contrato é obrigatório</mat-error>
-          }
-        </mat-form-field>
+        </mat-form-field>        
 
         <button
           mat-raised-button

@@ -56,41 +56,46 @@
           </mat-step>
 
           <!-- Passo 2: Plano -->
-          <mat-step [stepControl]="formPlano" label="Configurar Plano">
-            <form [formGroup]="formPlano" class="step-form">
-              <mat-form-field appearance="outline" class="campo-full">
-                <mat-label>Nome do Plano</mat-label>
-                <input matInput formControlName="nome">
-                <mat-icon matPrefix>workspace_premium</mat-icon>
-              </mat-form-field>
+<mat-step [stepControl]="formPlano" label="Escolha seu Plano">
+  <form [formGroup]="formPlano" class="step-form">
+    
+    <mat-radio-group formControlName="planoId" class="planos-grid">
+      @for (p of plano; track p.id) {
+        <label class="plano-card-moderno" [class.selecionado]="formPlano.get('planoId')?.value === p.id">
+          <mat-radio-button [value]="p.id" class="radio-escondido"></mat-radio-button>
+          
+          <div class="plano-content">
+            <div class="plano-header">
+              <span class="badge" *ngIf="p.nome === 'Profissional'">RECOMENDADO</span>
+              <mat-icon class="plano-icon">{{ p.nome === 'Enterprise' ? 'rocket_launch' : 'inventory' }}</mat-icon>
+              <h3 class="plano-titulo">{{ p.nome }}</h3>
+            </div>
 
-              <mat-form-field appearance="outline" class="campo-full">
-                <mat-label>Preço (R$)</mat-label>
-                <input matInput type="number" formControlName="preco">
-                <mat-icon matPrefix>attach_money</mat-icon>
-              </mat-form-field>
+            <div class="plano-preco-container">
+              <span class="moeda">R$</span>
+              <span class="valor">{{ p.preco | number:'1.2-2' }}</span>
+              <span class="periodo">/mês</span>
+            </div>
 
-              <mat-form-field appearance="outline" class="campo-full">
-                <mat-label>Duração (dias)</mat-label>
-                <input matInput type="number" formControlName="duracaoDias">
-                <mat-icon matPrefix>calendar_today</mat-icon>
-              </mat-form-field>
+            <ul class="plano-features">
+              <li>
+                <mat-icon>devices</mat-icon>
+                <span>Até <strong>{{ p.maxDispositivos }}</strong> dispositivos</span>
+              </li>              
+            </ul>
+          </div>
+        </label>
+      }
+    </mat-radio-group>
 
-              <mat-form-field appearance="outline" class="campo-full">
-                <mat-label>Máximo de Dispositivos</mat-label>
-                <input matInput type="number" formControlName="maxDispositivos">
-                <mat-icon matPrefix>devices</mat-icon>
-              </mat-form-field>
-
-              <div class="step-acoes">
-                <button mat-button matStepperPrevious>Voltar</button>
-                <button mat-raised-button color="primary" matStepperNext
-                  [disabled]="formPlano.invalid">
-                  Próximo
-                </button>
-              </div>
-            </form>
-          </mat-step>
+    <div class="step-acoes">
+      <button mat-button matStepperPrevious>Voltar</button>
+      <button mat-raised-button color="primary" matStepperNext [disabled]="formPlano.invalid">
+        Próximo
+      </button>
+    </div>
+  </form>
+</mat-step>
 
           <!-- Passo 3: Usuário Admin -->
           <mat-step [stepControl]="formUsuario" label="Criar Usuário Administrador">
@@ -152,12 +157,8 @@
       <div class="sucesso">
         <mat-icon class="icone-sucesso">check_circle</mat-icon>
         <h2>Setup Concluído! 🎉</h2>
-        <p>Sua conta foi configurada com sucesso.</p>
-        <p class="contrato-id">
-          <strong>ID do Contrato:</strong><br>
-          <code>{{ contratoIdGerado }}</code>
-        </p>
-        <p class="instrucao">Guarde o ID do contrato — você precisará dele para fazer login.</p>
+        <p>Sua conta foi configurada com sucesso.</p>        
+        <p class="instrucao">Acesse a tela de login para entrar na sua conta.</p>
         <button mat-raised-button color="primary" (click)="irParaLogin()">
           <mat-icon>login</mat-icon>
           Ir para Login
