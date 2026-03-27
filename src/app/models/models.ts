@@ -36,29 +36,9 @@ export interface ProdutoRequest {
   estoque: number;
 }
 
-// Cliente
-export interface ClienteResponse {
-  id: string;
-  nome: string;
-  email: string;
-  documento?: string;
-  telefone?: string;
-  criadoEm: string;
-  ativo: boolean;
-}
-
-export interface ClienteRequest {
-  nome: string;
-  email: string;
-  documento?: string;
-  telefone?: string;
-}
-
 // Contrato
 export interface ContratoResponse {
   id: string;
-  clienteId: string;
-  clienteNome: string;
   planoId: string;
   planoNome: string;
   dataInicio: string;
@@ -69,7 +49,6 @@ export interface ContratoResponse {
 }
 
 export interface ContratoRequest {
-  clienteId: string;
   planoId: string;
 }
 

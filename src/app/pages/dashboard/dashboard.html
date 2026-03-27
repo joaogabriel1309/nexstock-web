@@ -30,30 +30,6 @@
           </div>
         </mat-card-content>
       </mat-card>
-
-      <mat-card class="card card-roxo" routerLink="/clientes">
-        <mat-card-content>
-          <div class="card-info">
-            <div>
-              <p class="card-label">Total de Clientes</p>
-              <p class="card-valor">{{ totalClientes }}</p>
-            </div>
-            <mat-icon>people</mat-icon>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="card card-laranja">
-        <mat-card-content>
-          <div class="card-info">
-            <div>
-              <p class="card-label">Clientes Ativos</p>
-              <p class="card-valor">{{ clientesAtivos }}</p>
-            </div>
-            <mat-icon>person_check</mat-icon>
-          </div>
-        </mat-card-content>
-      </mat-card>
     </div>
 
     @if (produtosBaixoEstoque.length > 0) {

@@ -4,8 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
-import { ClienteResponse, ProdutoResponse } from '../../models/models';
-import { ClienteService } from '../../services/cliente.service';
+import { ProdutoResponse } from '../../models/models';
 import { ProdutoService } from '../../services/produto.service';
 import { TokenService } from '../../services/token.service';
 
@@ -26,11 +25,9 @@ export class Dashboard implements OnInit {
 
   carregando = true;
   produtos: ProdutoResponse[] = [];
-  clientes: ClienteResponse[] = [];
 
   constructor(
     private produtoService: ProdutoService,
-    private clienteService: ClienteService,
     private tokenService: TokenService
   ) {}
 
@@ -46,9 +43,6 @@ export class Dashboard implements OnInit {
       error: () => { this.carregando = false; }
     });
 
-    this.clienteService.listar().subscribe({
-      next: (dados) => { this.clientes = dados; }
-    });
   }
 
   get totalProdutos(): number {
@@ -57,14 +51,6 @@ export class Dashboard implements OnInit {
 
   get estoqueTotal(): number {
     return this.produtos.reduce((acc, p) => acc + Number(p.estoque), 0);
-  }
-
-  get totalClientes(): number {
-    return this.clientes.length;
-  }
-
-  get clientesAtivos(): number {
-    return this.clientes.filter(c => c.ativo).length;
   }
 
   get produtosBaixoEstoque(): ProdutoResponse[] {
