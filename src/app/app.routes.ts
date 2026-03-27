@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-    {
+  {
     path: 'setup',
     loadComponent: () =>
       import('./pages/setup/setup').then(m => m.Setup)
@@ -27,12 +27,7 @@ export const routes: Routes = [
         path: 'produtos',
         loadComponent: () =>
           import('./pages/produtos/produtos').then(m => m.Produtos)
-      },
-      {
-        path: 'clientes',
-        loadComponent: () =>
-          import('./pages/clientes/clientes').then(m => m.Clientes)
-      },
+      },      
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
