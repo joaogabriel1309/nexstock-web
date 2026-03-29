@@ -64,7 +64,7 @@ export class Setup {
     this.formUsuario = this.fb.group({
       nome:  ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      senha: ['', [Validators.required, Validators.minLength(6)]]
+      senha: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
