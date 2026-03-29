@@ -38,7 +38,7 @@ export class Setup {
 
   salvando = false;
   concluido = false;
-  plano: PlanoResponse[] = []; 
+  plano: PlanoResponse[] = [];
 
   formCliente: FormGroup;
   formPlano: FormGroup;
@@ -53,7 +53,7 @@ export class Setup {
     this.formCliente = this.fb.group({
       nome:      ['', Validators.required],
       email:     ['', [Validators.required, Validators.email]],
-      documento: [''],
+      documento: ['', Validators.required],
       telefone:  ['']
     });
 
@@ -100,7 +100,7 @@ export class Setup {
     };
     console.log(payload);
   this.http.post<void>(
-  `${environment.apiUrl}/api/setup`, 
+  `${environment.apiUrl}/api/setup`,
   payload
 ).subscribe({
   next: () => {

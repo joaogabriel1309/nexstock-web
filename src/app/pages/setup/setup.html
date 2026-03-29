@@ -1,6 +1,5 @@
 <div class="setup-container">
   <mat-card class="setup-card">
-
     @if (!concluido) {
       <mat-card-header>
         <div class="logo">
@@ -12,22 +11,23 @@
 
       <mat-card-content>
         <mat-stepper orientation="vertical" linear #stepper>
-
           <!-- Passo 1: Dados da empresa -->
           <mat-step [stepControl]="formCliente" label="Dados da Empresa">
             <form [formGroup]="formCliente" class="step-form">
               <mat-form-field appearance="outline" class="campo-full">
                 <mat-label>Nome da Empresa</mat-label>
-                <input matInput formControlName="nome">
+                <input matInput formControlName="nome" />
                 <mat-icon matPrefix>business</mat-icon>
-                @if (formCliente.get('nome')?.hasError('required') && formCliente.get('nome')?.touched) {
+                @if (
+                  formCliente.get('nome')?.hasError('required') && formCliente.get('nome')?.touched
+                ) {
                   <mat-error>Nome é obrigatório</mat-error>
                 }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="campo-full">
                 <mat-label>Email</mat-label>
-                <input matInput type="email" formControlName="email">
+                <input matInput type="email" formControlName="email" />
                 <mat-icon matPrefix>email</mat-icon>
                 @if (formCliente.get('email')?.invalid && formCliente.get('email')?.touched) {
                   <mat-error>Email válido é obrigatório</mat-error>
@@ -35,20 +35,26 @@
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="campo-full">
-                <mat-label>CNPJ/CPF (opcional)</mat-label>
-                <input matInput formControlName="documento">
+                <mat-label>CNPJ/CPF</mat-label> <input matInput formControlName="documento">
                 <mat-icon matPrefix>badge</mat-icon>
+                @if (formCliente.get('documento')?.hasError('required') && formCliente.get('documento')?.touched) {
+                  <mat-error>CPF/CNPJ é obrigatório</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="campo-full">
                 <mat-label>Telefone (opcional)</mat-label>
-                <input matInput formControlName="telefone">
+                <input matInput formControlName="telefone" />
                 <mat-icon matPrefix>phone</mat-icon>
               </mat-form-field>
 
               <div class="step-acoes">
-                <button mat-raised-button color="primary" matStepperNext
-                  [disabled]="formCliente.invalid">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  matStepperNext
+                  [disabled]="formCliente.invalid"
+                >
                   Próximo
                 </button>
               </div>
@@ -56,62 +62,75 @@
           </mat-step>
 
           <!-- Passo 2: Plano -->
-<mat-step [stepControl]="formPlano" label="Escolha seu Plano">
-  <form [formGroup]="formPlano" class="step-form">
-    
-    <mat-radio-group formControlName="planoId" class="planos-grid">
-      @for (p of plano; track p.id) {
-        <label class="plano-card-moderno" [class.selecionado]="formPlano.get('planoId')?.value === p.id">
-          <mat-radio-button [value]="p.id" class="radio-escondido"></mat-radio-button>
-          
-          <div class="plano-content">
-            <div class="plano-header">
-              <span class="badge" *ngIf="p.nome === 'Profissional'">RECOMENDADO</span>
-              <mat-icon class="plano-icon">{{ p.nome === 'Enterprise' ? 'rocket_launch' : 'inventory' }}</mat-icon>
-              <h3 class="plano-titulo">{{ p.nome }}</h3>
-            </div>
+          <mat-step [stepControl]="formPlano" label="Escolha seu Plano">
+            <form [formGroup]="formPlano" class="step-form">
+              <mat-radio-group formControlName="planoId" class="planos-grid">
+                @for (p of plano; track p.id) {
+                  <label
+                    class="plano-card-moderno"
+                    [class.selecionado]="formPlano.get('planoId')?.value === p.id"
+                  >
+                    <mat-radio-button [value]="p.id" class="radio-escondido"></mat-radio-button>
 
-            <div class="plano-preco-container">
-              <span class="moeda">R$</span>
-              <span class="valor">{{ p.preco | number:'1.2-2' }}</span>
-              <span class="periodo">/mês</span>
-            </div>
+                    <div class="plano-content">
+                      <div class="plano-header">
+                        <span class="badge" *ngIf="p.nome === 'Profissional'">RECOMENDADO</span>
+                        <mat-icon class="plano-icon">{{
+                          p.nome === 'Enterprise' ? 'rocket_launch' : 'inventory'
+                        }}</mat-icon>
+                        <h3 class="plano-titulo">{{ p.nome }}</h3>
+                      </div>
 
-            <ul class="plano-features">
-              <li>
-                <mat-icon>devices</mat-icon>
-                <span>Até <strong>{{ p.maxDispositivos }}</strong> dispositivos</span>
-              </li>              
-            </ul>
-          </div>
-        </label>
-      }
-    </mat-radio-group>
+                      <div class="plano-preco-container">
+                        <span class="moeda">R$</span>
+                        <span class="valor">{{ p.preco | number: '1.2-2' }}</span>
+                        <span class="periodo">/mês</span>
+                      </div>
 
-    <div class="step-acoes">
-      <button mat-button matStepperPrevious>Voltar</button>
-      <button mat-raised-button color="primary" matStepperNext [disabled]="formPlano.invalid">
-        Próximo
-      </button>
-    </div>
-  </form>
-</mat-step>
+                      <ul class="plano-features">
+                        <li>
+                          <mat-icon>devices</mat-icon>
+                          <span
+                            >Até <strong>{{ p.maxDispositivos }}</strong> dispositivos</span
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </label>
+                }
+              </mat-radio-group>
+
+              <div class="step-acoes">
+                <button mat-button matStepperPrevious>Voltar</button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  matStepperNext
+                  [disabled]="formPlano.invalid"
+                >
+                  Próximo
+                </button>
+              </div>
+            </form>
+          </mat-step>
 
           <!-- Passo 3: Usuário Admin -->
           <mat-step [stepControl]="formUsuario" label="Criar Usuário Administrador">
             <form [formGroup]="formUsuario" class="step-form">
               <mat-form-field appearance="outline" class="campo-full">
                 <mat-label>Seu Nome</mat-label>
-                <input matInput formControlName="nome">
+                <input matInput formControlName="nome" />
                 <mat-icon matPrefix>person</mat-icon>
-                @if (formUsuario.get('nome')?.hasError('required') && formUsuario.get('nome')?.touched) {
+                @if (
+                  formUsuario.get('nome')?.hasError('required') && formUsuario.get('nome')?.touched
+                ) {
                   <mat-error>Nome é obrigatório</mat-error>
                 }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="campo-full">
                 <mat-label>Email de Acesso</mat-label>
-                <input matInput type="email" formControlName="email">
+                <input matInput type="email" formControlName="email" />
                 <mat-icon matPrefix>email</mat-icon>
                 @if (formUsuario.get('email')?.invalid && formUsuario.get('email')?.touched) {
                   <mat-error>Email válido é obrigatório</mat-error>
@@ -120,18 +139,24 @@
 
               <mat-form-field appearance="outline" class="campo-full">
                 <mat-label>Senha</mat-label>
-                <input matInput type="password" formControlName="senha">
+                <input matInput type="password" formControlName="senha" />
                 <mat-icon matPrefix>lock</mat-icon>
-                @if (formUsuario.get('senha')?.hasError('minlength') && formUsuario.get('senha')?.touched) {
+                @if (
+                  formUsuario.get('senha')?.hasError('minlength') &&
+                  formUsuario.get('senha')?.touched
+                ) {
                   <mat-error>Mínimo 6 caracteres</mat-error>
                 }
               </mat-form-field>
 
               <div class="step-acoes">
                 <button mat-button matStepperPrevious>Voltar</button>
-                <button mat-raised-button color="primary"
+                <button
+                  mat-raised-button
+                  color="primary"
                   [disabled]="formUsuario.invalid || salvando"
-                  (click)="concluirSetup()">
+                  (click)="concluirSetup()"
+                >
                   @if (salvando) {
                     <mat-spinner diameter="20"></mat-spinner>
                   } @else {
@@ -141,7 +166,6 @@
               </div>
             </form>
           </mat-step>
-
         </mat-stepper>
       </mat-card-content>
 
@@ -157,7 +181,7 @@
       <div class="sucesso">
         <mat-icon class="icone-sucesso">check_circle</mat-icon>
         <h2>Setup Concluído! 🎉</h2>
-        <p>Sua conta foi configurada com sucesso.</p>        
+        <p>Sua conta foi configurada com sucesso.</p>
         <p class="instrucao">Acesse a tela de login para entrar na sua conta.</p>
         <button mat-raised-button color="primary" (click)="irParaLogin()">
           <mat-icon>login</mat-icon>
@@ -165,6 +189,5 @@
         </button>
       </div>
     }
-
   </mat-card>
 </div>
