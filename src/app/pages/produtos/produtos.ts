@@ -11,7 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ProdutoResponse } from '../../models/models';
+import { ProdutoRequest, ProdutoResponse } from '../../models/models';
 import { ProdutoService } from '../../services/produto.service';
 import { TokenService } from '../../services/token.service';
 
@@ -39,14 +39,14 @@ export class Produtos implements OnInit {
 
   produtos: ProdutoResponse[] = [];
   carregando = true;
-  colunas = ['nome', 'codigoBarras', 'estoque', 'versao', 'acoes'];
+  colunas = ['nome', 'codigoBarras', 'estoque', 'acoes'];
 
   formularioVisivel = false;
   editando: ProdutoResponse | null = null;
   form: FormGroup;
   salvando = false;
 
-  // ID fixo de dispositivo para operações — em produção viria do dispositivo cadastrado
+  // ID vindo do dispositivo (ajuste conforme sua lógica de auth)
   dispositivoId = '00000000-0000-0000-0000-000000000001';
 
   constructor(
@@ -56,9 +56,9 @@ export class Produtos implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.form = this.fb.group({
-      nome:         ['', [Validators.required, Validators.maxLength(255)]],
+      nome: ['', [Validators.required, Validators.maxLength(255)]],
       codigoBarras: ['', Validators.maxLength(100)],
-      estoque:      [0, [Validators.required, Validators.min(0)]]
+      estoque: [0, [Validators.required, Validators.min(0)]]
     });
   }
 
@@ -67,7 +67,20 @@ export class Produtos implements OnInit {
   }
 
   carregar(): void {
-   
+    const empresaId = this.tokenService.getEmpresaId();
+    if (!empresaId) return;
+
+    this.carregando = true;
+    this.produtoService.listar(empresaId).subscribe({
+      next: (res) => {
+        this.produtos = res;
+        this.carregando = false;
+      },
+      error: () => {
+        this.snackBar.open('Erro ao carregar produtos', 'Fechar', { duration: 3000 });
+        this.carregando = false;
+      }
+    });
   }
 
   abrirFormulario(produto?: ProdutoResponse): void {
@@ -94,22 +107,48 @@ export class Produtos implements OnInit {
   salvar(): void {
     if (this.form.invalid) return;
 
-    
+    const empresaId = this.tokenService.getEmpresaId();
+    if (!empresaId) return;
+
     this.salvando = true;
 
-    const request = {
+    const request: ProdutoRequest = {
       ...this.form.value,
+      empresaId: empresaId,
       dispositivoId: this.dispositivoId
     };
 
     const operacao = this.editando
-      
-    
+      ? this.produtoService.atualizar(empresaId, this.editando.id, request)
+      : this.produtoService.criar(request);
+
+    operacao.subscribe({
+      next: () => {
+        this.snackBar.open(`Produto ${this.editando ? 'atualizado' : 'criado'} com sucesso!`, 'OK', { duration: 3000 });
+        this.carregar();
+        this.fecharFormulario();
+        this.salvando = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.snackBar.open('Erro ao salvar produto', 'Fechar', { duration: 3000 });
+        this.salvando = false;
+      }
+    });
   }
 
   deletar(produto: ProdutoResponse): void {
+    const empresaId = this.tokenService.getEmpresaId();
+    if (!empresaId) return;
+
     if (!confirm(`Deseja remover "${produto.nome}"?`)) return;
 
-    
+    this.produtoService.deletar(empresaId, produto.id, this.dispositivoId).subscribe({
+      next: () => {
+        this.snackBar.open('Produto removido', 'OK', { duration: 3000 });
+        this.carregar();
+      },
+      error: () => this.snackBar.open('Erro ao remover produto', 'Fechar', { duration: 3000 })
+    });
   }
 }

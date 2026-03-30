@@ -1,7 +1,9 @@
 <div class="produtos">
   <div class="cabecalho">
     <h2>Produtos</h2>
-    <button mat-raised-button color="primary" (click)="abrirFormulario()">
+    <button mat-raised-button color="primary" 
+            (click)="abrirFormulario()" 
+            [disabled]="carregando || formularioVisivel">
       <mat-icon>add</mat-icon>
       Novo Produto
     </button>
@@ -16,7 +18,7 @@
         <form [formGroup]="form" (ngSubmit)="salvar()" class="form-grid">
           <mat-form-field appearance="outline">
             <mat-label>Nome</mat-label>
-            <input matInput formControlName="nome">
+            <input matInput formControlName="nome" placeholder="Ex: Teclado Mecânico">
             @if (form.get('nome')?.hasError('required') && form.get('nome')?.touched) {
               <mat-error>Nome é obrigatório</mat-error>
             }
@@ -24,7 +26,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Código de Barras</mat-label>
-            <input matInput formControlName="codigoBarras">
+            <input matInput formControlName="codigoBarras" placeholder="Opcional">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -36,13 +38,15 @@
           </mat-form-field>
 
           <div class="form-acoes">
-            <button mat-button type="button" (click)="fecharFormulario()">Cancelar</button>
+            <button mat-button type="button" (click)="fecharFormulario()" [disabled]="salvando">
+              Cancelar
+            </button>
             <button mat-raised-button color="primary" type="submit"
               [disabled]="form.invalid || salvando">
               @if (salvando) {
                 <mat-spinner diameter="18"></mat-spinner>
               } @else {
-                Salvar
+                {{ editando ? 'Atualizar' : 'Salvar' }}
               }
             </button>
           </div>
@@ -61,7 +65,7 @@
         @if (produtos.length === 0) {
           <div class="vazio">
             <mat-icon>inventory_2</mat-icon>
-            <p>Nenhum produto cadastrado.</p>
+            <p>Nenhum produto cadastrado para esta empresa.</p>
           </div>
         } @else {
           <table mat-table [dataSource]="produtos" class="tabela">
@@ -86,7 +90,7 @@
 
             <ng-container matColumnDef="versao">
               <th mat-header-cell *matHeaderCellDef>Versão</th>
-              <td mat-cell *matCellDef="let p">v{{ p.versao }}</td>
+              <td mat-cell *matCellDef="let p">v{{ p.versao || 1 }}</td>
             </ng-container>
 
             <ng-container matColumnDef="acoes">
