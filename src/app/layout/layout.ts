@@ -35,7 +35,7 @@ export class LayoutComponent {
   menuItems = [
     { label: 'Dashboard',  icon: 'dashboard',   rota: '/dashboard' },
     { label: 'Produtos',   icon: 'inventory_2',  rota: '/produtos'  },
-    { label: 'Clientes',   icon: 'people',       rota: '/clientes'  },
+    { label: 'Usuários',   icon: 'people',       rota: '/usuario'  },
   ];
 
   constructor(

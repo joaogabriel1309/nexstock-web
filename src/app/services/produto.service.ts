@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -11,25 +11,30 @@ export class ProdutoService {
 
   constructor(private http: HttpClient) {}
 
-  listar(contratoId: string): Observable<ProdutoResponse[]> {
-    return this.http.get<ProdutoResponse[]>(`${this.url}/contrato/${contratoId}`);
+  listar(empresaId: string): Observable<ProdutoResponse[]> {
+    const params = new HttpParams().set('empresaId', empresaId);
+    return this.http.get<ProdutoResponse[]>(this.url, { params });
   }
 
-  buscarPorId(contratoId: string, id: string): Observable<ProdutoResponse> {
-    return this.http.get<ProdutoResponse>(`${this.url}/contrato/${contratoId}/${id}`);
+  buscarPorId(empresaId: string, id: string): Observable<ProdutoResponse> {
+    const params = new HttpParams().set('empresaId', empresaId);
+    return this.http.get<ProdutoResponse>(`${this.url}/${id}`, { params });
   }
 
   criar(request: ProdutoRequest): Observable<ProdutoResponse> {
     return this.http.post<ProdutoResponse>(this.url, request);
   }
 
-  atualizar(contratoId: string, id: string, request: ProdutoRequest): Observable<ProdutoResponse> {
-    return this.http.put<ProdutoResponse>(`${this.url}/contrato/${contratoId}/${id}`, request);
+  atualizar(empresaId: string, id: string, request: ProdutoRequest): Observable<ProdutoResponse> {
+    const params = new HttpParams().set('empresaId', empresaId);
+    return this.http.put<ProdutoResponse>(`${this.url}/${id}`, request, { params });
   }
 
-  deletar(contratoId: string, id: string, dispositivoId: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.url}/contrato/${contratoId}/${id}?dispositivoId=${dispositivoId}`
-    );
+  deletar(empresaId: string, id: string, dispositivoId: string): Observable<void> {
+    const params = new HttpParams()
+      .set('empresaId', empresaId)
+      .set('dispositivoId', dispositivoId);
+      
+    return this.http.delete<void>(`${this.url}/${id}`, { params });
   }
 }

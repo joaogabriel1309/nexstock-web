@@ -1,16 +1,19 @@
 <mat-sidenav-container class="container">
-
+  
   <mat-sidenav #sidenav [opened]="menuAberto" mode="side" class="sidenav">
     <div class="sidenav-logo">
-      <mat-icon>inventory_2</mat-icon>
+      <div class="logo-wrapper">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
       <span>NexStock</span>
     </div>
 
-    <mat-nav-list>
+    <mat-nav-list class="nav-list">
       @for (item of menuItems; track item.rota) {
         <a mat-list-item
            [routerLink]="item.rota"
-           routerLinkActive="active-link">
+           routerLinkActive="active-link"
+           class="menu-item">
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.label }}</span>
         </a>
@@ -20,18 +23,24 @@
 
   <mat-sidenav-content class="conteudo">
     <mat-toolbar color="primary" class="toolbar">
-      <button mat-icon-button (click)="sidenav.toggle()">
+      <button mat-icon-button (click)="sidenav.toggle()" class="menu-toggle">
         <mat-icon>menu</mat-icon>
       </button>
+      
       <span class="spacer"></span>
-      <button mat-icon-button [matMenuTriggerFor]="menuUsuario">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-      <mat-menu #menuUsuario="matMenu">
-        <button mat-menu-item disabled>
-          <mat-icon>person</mat-icon>
-          <span>{{ tokenService.getUsuario()?.nome }}</span>
+
+      <div class="user-info">
+        <span class="user-label">{{ tokenService.getUsuario()?.nome }}</span>
+        <button mat-icon-button [matMenuTriggerFor]="menuUsuario" class="user-btn">
+          <mat-icon>account_circle</mat-icon>
         </button>
+      </div>
+
+      <mat-menu #menuUsuario="matMenu" class="custom-user-menu">
+        <div class="menu-header-info">
+          <strong>{{ tokenService.getUsuario()?.nome }}</strong>
+          <small>Acesso Sistema</small>
+        </div>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="sair()">
           <mat-icon>logout</mat-icon>
@@ -41,7 +50,9 @@
     </mat-toolbar>
 
     <div class="pagina">
-      <router-outlet></router-outlet>
+      <div class="router-container">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </mat-sidenav-content>
 

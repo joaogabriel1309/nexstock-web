@@ -31,9 +31,8 @@ export class Dashboard implements OnInit {
     private tokenService: TokenService
   ) {}
 
-  ngOnInit(): void {
-
-
+  get totalUsuarios(): number {
+    return this.tokenService.totalUsuarios;
   }
 
   get totalProdutos(): number {

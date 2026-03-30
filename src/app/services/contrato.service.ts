@@ -11,7 +11,7 @@ export class ContratoService {
 
   constructor(private http: HttpClient) {}
 
-  listarPorCliente(clienteId: string): Observable<ContratoResponse[]> {
-    return this.http.get<ContratoResponse[]>(`${this.url}/cliente/${clienteId}`);
+  buscarPorId(id: string): Observable<ContratoResponse> {
+    return this.http.get<ContratoResponse>(`${this.url}/${id}`);
   }
 }

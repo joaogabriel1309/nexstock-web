@@ -18,10 +18,6 @@ export class PlanoService {
 
   constructor(private http: HttpClient) {}
 
-  criar(request: PlanoRequest): Observable<PlanoResponse> {
-    return this.http.post<PlanoResponse>(this.url, request);
-  }
-
   listar(): Observable<PlanoResponse[]> {
     return this.http.get<PlanoResponse[]>(this.url);
   }
