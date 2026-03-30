@@ -44,7 +44,6 @@ export class LoginComponent {
     this.form = this.fb.group({
       email:      ['', [Validators.required, Validators.email]],
       senha:      ['', [Validators.required, Validators.minLength(6)]],
-      contratoId: ['', [Validators.required]]
     });
   }
 
