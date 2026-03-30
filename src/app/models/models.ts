@@ -100,13 +100,18 @@ export interface MovimentacaoResquest {
   quantidade: BigInteger;
 }
 
-export interface UsuarioResquest {
+// Usuario
+export interface UsuarioResponse {
+  id: string;
   empresaId: string;
   nome: string;
   email: string;
-  telefone: string;
   senha: string;
   role: string;
+}
+export interface UsuarioResquest {
+  id: string;
+  empresaId: string;
 }
 
 // Seput
@@ -120,3 +125,4 @@ export interface SetupRequest {
     adminSenha: string;
     planoId: string;
 }
+
