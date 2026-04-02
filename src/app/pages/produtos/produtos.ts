@@ -30,13 +30,12 @@ import { TokenService } from '../../services/token.service';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './produtos.html',
-  styleUrl: './produtos.scss'
+  styleUrl: './produtos.scss',
 })
 export class Produtos implements OnInit {
-
   produtos: ProdutoResponse[] = [];
   carregando = true;
   colunas = ['nome', 'codigoBarras', 'estoque', 'acoes'];
@@ -46,19 +45,16 @@ export class Produtos implements OnInit {
   form: FormGroup;
   salvando = false;
 
-  // ID vindo do dispositivo (ajuste conforme sua lógica de auth)
-  dispositivoId = '00000000-0000-0000-0000-000000000001';
-
   constructor(
     private produtoService: ProdutoService,
     private tokenService: TokenService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.maxLength(255)]],
       codigoBarras: ['', Validators.maxLength(100)],
-      estoque: [0, [Validators.required, Validators.min(0)]]
+      estoque: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -79,7 +75,7 @@ export class Produtos implements OnInit {
       error: () => {
         this.snackBar.open('Erro ao carregar produtos', 'Fechar', { duration: 3000 });
         this.carregando = false;
-      }
+      },
     });
   }
 
@@ -91,7 +87,7 @@ export class Produtos implements OnInit {
       this.form.patchValue({
         nome: produto.nome,
         codigoBarras: produto.codigoBarras,
-        estoque: produto.estoque
+        estoque: produto.estoque,
       });
     } else {
       this.form.reset({ estoque: 0 });
@@ -115,7 +111,6 @@ export class Produtos implements OnInit {
     const request: ProdutoRequest = {
       ...this.form.value,
       empresaId: empresaId,
-      dispositivoId: this.dispositivoId
     };
 
     const operacao = this.editando
@@ -124,7 +119,11 @@ export class Produtos implements OnInit {
 
     operacao.subscribe({
       next: () => {
-        this.snackBar.open(`Produto ${this.editando ? 'atualizado' : 'criado'} com sucesso!`, 'OK', { duration: 3000 });
+        this.snackBar.open(
+          `Produto ${this.editando ? 'atualizado' : 'criado'} com sucesso!`,
+          'OK',
+          { duration: 3000 },
+        );
         this.carregar();
         this.fecharFormulario();
         this.salvando = false;
@@ -133,7 +132,7 @@ export class Produtos implements OnInit {
         console.error(err);
         this.snackBar.open('Erro ao salvar produto', 'Fechar', { duration: 3000 });
         this.salvando = false;
-      }
+      },
     });
   }
 
@@ -143,12 +142,12 @@ export class Produtos implements OnInit {
 
     if (!confirm(`Deseja remover "${produto.nome}"?`)) return;
 
-    this.produtoService.deletar(empresaId, produto.id, this.dispositivoId).subscribe({
+    this.produtoService.deletar(empresaId, produto.id).subscribe({
       next: () => {
         this.snackBar.open('Produto removido', 'OK', { duration: 3000 });
         this.carregar();
       },
-      error: () => this.snackBar.open('Erro ao remover produto', 'Fechar', { duration: 3000 })
+      error: () => this.snackBar.open('Erro ao remover produto', 'Fechar', { duration: 3000 }),
     });
   }
 }

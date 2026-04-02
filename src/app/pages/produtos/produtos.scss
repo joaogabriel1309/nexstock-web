@@ -1,80 +1,105 @@
-.produtos {
-  .cabecalho {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
+.produtos-container {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
 
-    h2 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
-      color: #333;
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+
+    .title-wrapper {
+      h1 { margin: 0; font-size: 28px; font-weight: 800; color: #1a1f36; }
+      p { margin: 4px 0 0; color: #697386; }
+    }
+
+    .btn-add {
+      height: 48px; border-radius: 10px; font-weight: 600;
+      box-shadow: 0 4px 12px rgba(63, 81, 181, 0.2);
+    }
+  }
+
+  .form-card {
+    border-radius: 16px; margin-bottom: 32px; border: 1px solid #e3e8ee;
+    mat-card-title { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+  }
+
+  .modern-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    padding: 24px 0;
+
+    .col-span-2 { grid-column: span 2; }
+  }
+
+  .form-footer {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+    border-top: 1px solid #f7fafc;
+    padding-top: 20px;
+  }
+
+  .table-card {
+    border-radius: 16px; overflow: hidden; border: 1px solid #e3e8ee;
+  }
+
+  .modern-table {
+    width: 100%;
+
+    th.mat-header-cell {
+      background: #f8fafc; color: #4f566b; font-weight: 600; text-transform: uppercase;
+      font-size: 12px; letter-spacing: 0.5px; padding: 16px;
+    }
+
+    td.mat-cell { padding: 16px; border-bottom: 1px solid #f1f4f8; }
+
+    .name-cell {
+      .p-name { display: block; font-weight: 600; color: #1a1f36; font-size: 15px; }
+      .p-version { font-size: 11px; color: #9aa4b2; background: #f1f4f8; padding: 2px 6px; border-radius: 4px; }
+    }
+
+    .barcode-text {
+      font-family: 'Roboto Mono', monospace; background: #f1f4f8; padding: 4px 8px;
+      border-radius: 4px; font-size: 12px; color: #475467;
+    }
+
+    .stock-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 20px; background: #ecfdf3; color: #027a48; font-weight: 600; font-size: 13px;
+      mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+      &.low-stock { background: #fef3f2; color: #b42318; animation: pulse 2s infinite; }
+    }
+  }
+
+  .actions-cell {
+    text-align: right;
+    .edit-btn { color: #3f51b5; }
+  }
+
+  .state-display {
+    text-align: center; padding: 80px 0; color: #697386;
+    &.empty {
+      .icon-circle {
+        width: 64px; height: 64px; background: #f4f7fa; border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;
+        mat-icon { font-size: 32px; width: 32px; height: 32px; color: #a3acb9; }
+      }
+      h3 { margin: 0; color: #1a1f36; }
     }
   }
 }
 
-.form-card {
-  margin-bottom: 24px;
-  border-radius: 12px !important;
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  padding-top: 16px;
-}
-
-.form-acoes {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  grid-column: 1 / -1;
-}
-
-.loading {
-  display: flex;
-  justify-content: center;
-  padding: 60px;
-}
-
-.tabela {
-  width: 100%;
-}
-
-.vazio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 48px;
-  color: #999;
-
-  mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 12px;
-  }
-}
-
-.estoque-baixo {
-  color: #f44336; 
-  font-weight: bold;
-}
-
-.vazio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px;
-  color: #666;
-  
-  mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 10px;
-  }
-}
+.animate-in { animation: fadeIn 0.3s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

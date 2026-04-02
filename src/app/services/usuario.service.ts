@@ -11,6 +11,10 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
+  cadastrar(dados: any): Observable<UsuarioResponse> {
+    return this.http.post<UsuarioResponse>(this.url, dados);
+  }
+
   listarTodoPorEmpresa(empresaId: string): Observable<UsuarioResponse[]> {
     const params = new HttpParams().set('empresaId', empresaId);
     return this.http.get<UsuarioResponse[]>(this.url, { params });

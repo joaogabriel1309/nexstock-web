@@ -6,7 +6,6 @@ import { ProdutoRequest, ProdutoResponse } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class ProdutoService {
-
   private url = `${environment.apiUrl}/api/produtos`;
 
   constructor(private http: HttpClient) {}
@@ -30,11 +29,9 @@ export class ProdutoService {
     return this.http.put<ProdutoResponse>(`${this.url}/${id}`, request, { params });
   }
 
-  deletar(empresaId: string, id: string, dispositivoId: string): Observable<void> {
-    const params = new HttpParams()
-      .set('empresaId', empresaId)
-      .set('dispositivoId', dispositivoId);
-      
+  deletar(empresaId: string, id: string): Observable<void> {
+    const params = new HttpParams().set('empresaId', empresaId);
+
     return this.http.delete<void>(`${this.url}/${id}`, { params });
   }
 }
