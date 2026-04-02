@@ -1,0 +1,132 @@
+<div class="dispositivos-container">
+  <header class="page-header">
+    <div class="user-info-area">
+      <button mat-icon-button (click)="voltar()" matTooltip="Voltar para usuários" class="btn-back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="title-group">
+        <h1>Dispositivos de {{ nomeUsuario }}</h1>
+        <p class="subtitulo">Gerencie os acessos mobile e desktop deste colaborador</p>
+      </div>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="abrirModalAdicionar()"
+      [disabled]="formularioVisivel"
+      class="btn-add"
+    >
+      <mat-icon>add_to_queue</mat-icon>
+      Vincular Novo Aparelho
+    </button>
+  </header>
+
+  @if (formularioVisivel) {
+    <mat-card class="form-card animate-in">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>cell_tower</mat-icon>
+          Autorizar Novo Dispositivo
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="salvarDispositivo()" class="modern-form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Identificação (Ex: Tablet 01)</mat-label>
+            <input matInput formControlName="nome" placeholder="Ex: iPad Almoxarifado" />
+            <mat-icon matPrefix>label</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de Acesso</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option value="WEB">
+                <mat-icon>desktop_windows</mat-icon> Computador / Desktop
+              </mat-option>
+              <mat-option value="MOBILE">
+                <mat-icon>smartphone</mat-icon> Smartphone / Tablet
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>devices</mat-icon>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="fecharFormulario()" [disabled]="salvando">
+              Cancelar
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="form.invalid || salvando"
+            >
+              @if (salvando) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <ng-container>
+                  <span>Confirmar Vínculo</span>
+                </ng-container>
+              }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (carregando) {
+    <div class="state-display">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Buscando dispositivos autorizados...</p>
+    </div>
+  } @else {
+    <mat-card class="list-card">
+      <mat-list class="modern-list">
+        @for (disp of dispositivos; track disp.id) {
+          <mat-list-item class="device-item">
+            <div matListItemIcon class="device-icon" [class.mobile]="disp.sistema">
+              <mat-icon>{{ disp.sistema === 'WEB' ? 'desktop_windows' : 'smartphone' }}</mat-icon>
+            </div>
+
+            <div matListItemTitle class="device-name">{{ disp.nome }}</div>
+
+            <div matListItemLine class="device-meta">
+              <span class="token-tag">
+                <mat-icon>vpn_key</mat-icon>
+                <code>{{ disp.sistema || 'ATIVO' }}</code>
+              </span>
+              <span class="divider">|</span>
+              <span class="sync-info">
+                <mat-icon>sync</mat-icon>
+                Última atividade: {{ disp.ultimaSync | date: 'dd/MM/yyyy HH:mm' }}
+              </span>
+            </div>
+
+            <div matListItemMeta>
+              <button
+                mat-icon-button
+                color="warn"
+                matTooltip="Revogar Acesso"
+                (click)="remover(disp.id)"
+                class="btn-delete"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        } @empty {
+          <div class="state-display empty">
+            <div class="icon-circle">
+              <mat-icon>devices_paused</mat-icon>
+            </div>
+            <h3>Nenhum dispositivo</h3>
+            <p>Este usuário ainda não tem aparelhos vinculados ao NexStock.</p>
+          </div>
+        }
+      </mat-list>
+    </mat-card>
+  }
+</div>
