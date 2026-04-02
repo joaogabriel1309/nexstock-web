@@ -1,3 +1,4 @@
+import { BreakpointObserver, LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +16,7 @@ import { TokenService } from '../services/token.service';
   standalone: true,
   imports: [
     CommonModule,
+    LayoutModule,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
@@ -23,25 +25,30 @@ import { TokenService } from '../services/token.service';
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   templateUrl: './layout.html',
-  styleUrl: './layout.scss'
+  styleUrl: './layout.scss',
 })
 export class LayoutComponent {
-
   menuAberto = true;
+  isDesktop: boolean = true;
 
   menuItems = [
-    { label: 'Dashboard',  icon: 'dashboard',   rota: '/dashboard' },
-    { label: 'Produtos',   icon: 'inventory_2',  rota: '/produtos'  },
-    { label: 'Usuários',   icon: 'people',       rota: '/usuario'  },
+    { label: 'Dashboard', icon: 'dashboard', rota: '/dashboard' },
+    { label: 'Produtos', icon: 'inventory_2', rota: '/produtos' },
+    { label: 'Usuários', icon: 'people', rota: '/usuario' },
   ];
 
   constructor(
     private authService: AuthService,
-    public tokenService: TokenService
-  ) {}
+    public tokenService: TokenService,
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    this.breakpointObserver.observe(['(max-width: 959px)']).subscribe((result) => {
+      this.isDesktop = !result.matches;
+    });
+  }
 
   sair(): void {
     this.authService.logout();

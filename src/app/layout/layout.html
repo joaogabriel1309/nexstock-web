@@ -1,59 +1,65 @@
 <mat-sidenav-container class="container">
-  
-  <mat-sidenav #sidenav [opened]="menuAberto" mode="side" class="sidenav">
+  <mat-sidenav #sidenav [opened]="isDesktop" [mode]="isDesktop ? 'side' : 'over'" class="sidenav">
     <div class="sidenav-logo">
       <div class="logo-wrapper">
         <mat-icon>inventory_2</mat-icon>
       </div>
-      <span>NexStock</span>
+      <span class="brand-name">NexStock</span>
     </div>
 
     <mat-nav-list class="nav-list">
       @for (item of menuItems; track item.rota) {
-        <a mat-list-item
-           [routerLink]="item.rota"
-           routerLinkActive="active-link"
-           class="menu-item">
+        <a mat-list-item [routerLink]="item.rota" routerLinkActive="active-link" class="menu-item">
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.label }}</span>
+          <div class="active-indicator"></div>
         </a>
       }
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="conteudo">
-    <mat-toolbar color="primary" class="toolbar">
+    <mat-toolbar class="toolbar-modern">
       <button mat-icon-button (click)="sidenav.toggle()" class="menu-toggle">
         <mat-icon>menu</mat-icon>
       </button>
-      
+
       <span class="spacer"></span>
 
-      <div class="user-info">
-        <span class="user-label">{{ tokenService.getUsuario()?.nome }}</span>
-        <button mat-icon-button [matMenuTriggerFor]="menuUsuario" class="user-btn">
-          <mat-icon>account_circle</mat-icon>
-        </button>
+      <div class="user-profile" [matMenuTriggerFor]="menuUsuario">
+        <div class="user-text desktop-only">
+          <span class="user-name">{{ tokenService.getUsuario()?.nome }}</span>
+          <span class="user-role">Acesso ao Sistema</span>
+        </div>
+        <div class="avatar">
+          {{ tokenService.getUsuario()?.nome?.charAt(0) }}
+        </div>
       </div>
 
-      <mat-menu #menuUsuario="matMenu" class="custom-user-menu">
-        <div class="menu-header-info">
-          <strong>{{ tokenService.getUsuario()?.nome }}</strong>
-          <small>Acesso Sistema</small>
+      <mat-menu #menuUsuario="matMenu" xPosition="before" class="modern-user-menu">
+        <div class="menu-header">
+          <div class="avatar-sm">
+            {{ tokenService.getUsuario()?.nome?.charAt(0) }}
+          </div>
+          <div class="user-details">
+            <span class="name">{{ tokenService.getUsuario()?.nome }}</span>
+            <span class="email">Acesso ao Sistema</span>
+          </div>
         </div>
+
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="sair()">
+
+        <button mat-menu-item (click)="sair()" class="logout-item">
           <mat-icon>logout</mat-icon>
-          <span>Sair</span>
+          <span>Sair da conta</span>
         </button>
       </mat-menu>
     </mat-toolbar>
 
-    <div class="pagina">
+    <main class="pagina">
       <div class="router-container">
         <router-outlet></router-outlet>
       </div>
-    </div>
+    </main>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

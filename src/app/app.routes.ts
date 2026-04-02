@@ -27,7 +27,16 @@ export const routes: Routes = [
         path: 'produtos',
         loadComponent: () =>
           import('./pages/produtos/produtos').then(m => m.Produtos)
-      },      
+      }, 
+      {
+        path: 'usuario', 
+        loadComponent: () =>
+          import('./pages/usuario/usuario').then(m => m.Usuario)
+      },
+      {
+        path: 'usuarios/:id/dispositivos',
+        loadComponent: () => import('./pages/dispositivo/dispositivo').then(m => m.Dispositivos)
+      },   
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

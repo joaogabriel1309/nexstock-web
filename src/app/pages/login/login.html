@@ -10,10 +10,9 @@
 
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="entrar()">
-
         <mat-form-field appearance="outline" class="campo-full">
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="seu@email.com">
+          <input matInput type="email" formControlName="email" placeholder="seu@email.com" />
           <mat-icon matPrefix>email</mat-icon>
           @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
             <mat-error>Email é obrigatório</mat-error>
@@ -25,7 +24,7 @@
 
         <mat-form-field appearance="outline" class="campo-full">
           <mat-label>Senha</mat-label>
-          <input matInput [type]="mostrarSenha ? 'text' : 'password'" formControlName="senha">
+          <input matInput [type]="mostrarSenha ? 'text' : 'password'" formControlName="senha" />
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix type="button" (click)="mostrarSenha = !mostrarSenha">
             <mat-icon>{{ mostrarSenha ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -33,14 +32,15 @@
           @if (form.get('senha')?.hasError('required') && form.get('senha')?.touched) {
             <mat-error>Senha é obrigatória</mat-error>
           }
-        </mat-form-field>        
+        </mat-form-field>
 
         <button
           mat-raised-button
           color="primary"
           type="submit"
           class="btn-entrar"
-          [disabled]="form.invalid || carregando">
+          [disabled]="form.invalid || carregando"
+        >
           @if (carregando) {
             <mat-spinner diameter="20"></mat-spinner>
           } @else {
@@ -50,9 +50,8 @@
 
         <p class="link-setup">
           Primeira vez?
-        <a routerLink="/setup">Configurar conta</a>
+          <a routerLink="/setup">Configurar conta</a>
         </p>
-
       </form>
     </mat-card-content>
   </mat-card>
