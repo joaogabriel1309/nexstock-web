@@ -6,6 +6,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string;
   usuarioId: string;
+  dispositivoId: string;
   email: string;
   nome: string;
   role: string;
@@ -67,6 +68,7 @@ export interface DispositivoResquest {
 export interface DispositivoResponse {
   id: string;
   empresaId: string;
+  usuarioId: string;
   nome: string;
   sistema: string;
   ultimaSync: string;
@@ -116,13 +118,12 @@ export interface UsuarioResquest {
 
 // Seput
 export interface SetupRequest {
-    empresaNome: string;
-    empresaEmail: string;
-    empresaCpfCnpj: string;
-    empresaTelefone: string;
-    adminNome: string;
-    adminEmail: string;
-    adminSenha: string;
-    planoId: string;
+  empresaNome: string;
+  empresaEmail: string;
+  empresaCpfCnpj: string;
+  empresaTelefone: string;
+  adminNome: string;
+  adminEmail: string;
+  adminSenha: string;
+  planoId: string;
 }
-
