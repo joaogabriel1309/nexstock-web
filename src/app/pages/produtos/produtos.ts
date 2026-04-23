@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { finalize, of, switchMap } from 'rxjs';
 import { ProdutoRequest, ProdutoResponse } from '../../models/models';
 import { ProdutoService } from '../../services/produto.service';
 import { TokenService } from '../../services/token.service';
@@ -44,6 +45,10 @@ export class Produtos implements OnInit {
   editando: ProdutoResponse | null = null;
   form: FormGroup;
   salvando = false;
+  arquivoImagem: File | null = null;
+  previewImagemUrl: string | null = null;
+  readonly tiposImagemAceitos = 'image/png,image/jpeg,image/webp';
+  readonly tamanhoMaximoImagemMb = 5;
 
   constructor(
     private produtoService: ProdutoService,
@@ -82,6 +87,7 @@ export class Produtos implements OnInit {
   abrirFormulario(produto?: ProdutoResponse): void {
     this.editando = produto || null;
     this.formularioVisivel = true;
+    this.limparImagemSelecionada(false);
 
     if (produto) {
       this.form.patchValue({
@@ -89,6 +95,7 @@ export class Produtos implements OnInit {
         codigoBarras: produto.codigoBarras,
         estoque: produto.estoque,
       });
+      this.previewImagemUrl = produto.imagemUrl || null;
     } else {
       this.form.reset({ estoque: 0 });
     }
@@ -98,12 +105,14 @@ export class Produtos implements OnInit {
     this.formularioVisivel = false;
     this.editando = null;
     this.form.reset({ estoque: 0 });
+    this.limparImagemSelecionada();
   }
 
   salvar(): void {
     if (this.form.invalid) return;
 
     const empresaId = this.tokenService.getEmpresaId();
+    const dispositivoId = this.tokenService.getDispositivoId();
     if (!empresaId) return;
 
     this.salvando = true;
@@ -111,13 +120,27 @@ export class Produtos implements OnInit {
     const request: ProdutoRequest = {
       ...this.form.value,
       empresaId: empresaId,
+      dispositivoId: dispositivoId || undefined,
     };
 
     const operacao = this.editando
       ? this.produtoService.atualizar(empresaId, this.editando.id, request)
       : this.produtoService.criar(request);
 
-    operacao.subscribe({
+    operacao
+      .pipe(
+        switchMap((produto) => {
+          if (!this.arquivoImagem) {
+            return of(produto);
+          }
+
+          return this.produtoService.uploadImagem(empresaId, produto.id, this.arquivoImagem);
+        }),
+        finalize(() => {
+          this.salvando = false;
+        }),
+      )
+      .subscribe({
       next: () => {
         this.snackBar.open(
           `Produto ${this.editando ? 'atualizado' : 'criado'} com sucesso!`,
@@ -126,14 +149,80 @@ export class Produtos implements OnInit {
         );
         this.carregar();
         this.fecharFormulario();
-        this.salvando = false;
       },
       error: (err) => {
         console.error(err);
-        this.snackBar.open('Erro ao salvar produto', 'Fechar', { duration: 3000 });
-        this.salvando = false;
+        const mensagem = err?.error?.erro || err?.error?.message || 'Erro ao salvar produto';
+        this.snackBar.open(mensagem, 'Fechar', { duration: 4000 });
       },
     });
+  }
+
+  selecionarImagem(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const arquivo = input.files?.[0];
+
+    if (!arquivo) {
+      return;
+    }
+
+    if (!this.validarImagem(arquivo)) {
+      input.value = '';
+      return;
+    }
+
+    this.limparImagemSelecionada(false);
+    this.arquivoImagem = arquivo;
+    this.previewImagemUrl = URL.createObjectURL(arquivo);
+  }
+
+  removerImagemSelecionada(input?: HTMLInputElement): void {
+    this.limparImagemSelecionada();
+
+    if (this.editando?.imagemUrl) {
+      this.previewImagemUrl = this.editando.imagemUrl;
+    }
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  temNovaImagemSelecionada(): boolean {
+    return !!this.arquivoImagem;
+  }
+
+  private validarImagem(arquivo: File): boolean {
+    const tiposPermitidos = ['image/png', 'image/jpeg', 'image/webp'];
+    const tamanhoMaximoBytes = this.tamanhoMaximoImagemMb * 1024 * 1024;
+
+    if (!tiposPermitidos.includes(arquivo.type)) {
+      this.snackBar.open('Use uma imagem PNG, JPG ou WEBP.', 'Fechar', { duration: 4000 });
+      return false;
+    }
+
+    if (arquivo.size > tamanhoMaximoBytes) {
+      this.snackBar.open(
+        `A imagem deve ter no máximo ${this.tamanhoMaximoImagemMb}MB.`,
+        'Fechar',
+        { duration: 4000 },
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  private limparImagemSelecionada(limparPreview = true): void {
+    if (this.arquivoImagem && this.previewImagemUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.previewImagemUrl);
+    }
+
+    this.arquivoImagem = null;
+
+    if (limparPreview) {
+      this.previewImagemUrl = null;
+    }
   }
 
   deletar(produto: ProdutoResponse): void {
