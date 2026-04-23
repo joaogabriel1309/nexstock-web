@@ -21,17 +21,26 @@ export interface ProdutoResponse {
   nome: string;
   codigoBarras?: string;
   estoque: number;
+  imagemUrl?: string;
+  imagemKey?: string;
   atualizadoEm: string;
   versao: number;
   dispositivoUltimaAlteracaoId?: string;
-  deletado: boolean;
+  deletado?: boolean;
+  deletadoEm?: string;
 }
 export interface ProdutoRequest {
   nome: string;
   codigoBarras?: string;
   estoque: number;
   empresaId: string;
-  dispositivoId: string;
+  dispositivoId?: string;
+}
+
+export interface ProdutoImagemResponse {
+  produtoId: string;
+  imagemUrl: string;
+  imagemKey: string;
 }
 
 // Contrato

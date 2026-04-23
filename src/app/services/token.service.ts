@@ -26,6 +26,11 @@ export class TokenService {
     return raw ? JSON.parse(raw).empresaId : null;
   }
 
+  getDispositivoId(): string | null {
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw).dispositivoId : null;
+  }
+
   limpar(): void {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);

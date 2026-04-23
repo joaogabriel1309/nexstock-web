@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ProdutoRequest, ProdutoResponse } from '../models/models';
+import { ProdutoImagemResponse, ProdutoRequest, ProdutoResponse } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class ProdutoService {
@@ -27,6 +27,20 @@ export class ProdutoService {
   atualizar(empresaId: string, id: string, request: ProdutoRequest): Observable<ProdutoResponse> {
     const params = new HttpParams().set('empresaId', empresaId);
     return this.http.put<ProdutoResponse>(`${this.url}/${id}`, request, { params });
+  }
+
+  uploadImagem(
+    empresaId: string,
+    produtoId: string,
+    arquivo: File,
+  ): Observable<ProdutoImagemResponse> {
+    const params = new HttpParams().set('empresaId', empresaId);
+    const formData = new FormData();
+    formData.append('arquivo', arquivo);
+
+    return this.http.post<ProdutoImagemResponse>(`${this.url}/${produtoId}/imagem`, formData, {
+      params,
+    });
   }
 
   deletar(empresaId: string, id: string): Observable<void> {
