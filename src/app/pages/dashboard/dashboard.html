@@ -35,7 +35,7 @@
         <mat-card-content>
           <div class="card-info">
             <div>
-              <p class="card-label">Usuários Ativos</p>
+              <p class="card-label">Usuarios Ativos</p>
               <p class="card-valor">{{ totalUsuarios }}</p>
             </div>
             <mat-icon>people</mat-icon>
@@ -57,7 +57,7 @@
             <thead>
               <tr>
                 <th>Produto</th>
-                <th>Código de Barras</th>
+                <th>SKU</th>
                 <th>Estoque atual</th>
               </tr>
             </thead>
@@ -65,8 +65,8 @@
               @for (p of produtosBaixoEstoque; track p.id) {
                 <tr>
                   <td>{{ p.nome }}</td>
-                  <td>{{ p.codigoBarras || 'S/G' }}</td>
-                  <td class="estoque-baixo">{{ p.estoque }}</td>
+                  <td>{{ p.sku }}</td>
+                  <td class="estoque-baixo">{{ p.estoqueAtual }}</td>
                 </tr>
               }
             </tbody>
