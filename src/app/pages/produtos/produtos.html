@@ -2,7 +2,7 @@
   <header class="page-header">
     <div class="title-wrapper">
       <h1>Produtos</h1>
-      <p>Controle de inventário e códigos de barras</p>
+      <p>Cadastro, precos, estoque e imagem dos itens.</p>
     </div>
 
     <button
@@ -28,10 +28,10 @@
 
       <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="salvar()" class="modern-form-grid">
-          <div class="image-upload col-span-2">
+          <div class="image-upload full-span">
             <div class="image-preview" [class.has-image]="!!previewImagemUrl">
               @if (previewImagemUrl) {
-                <img [src]="previewImagemUrl" [alt]="form.get('nome')?.value || 'Prévia da imagem'" />
+                <img [src]="previewImagemUrl" [alt]="form.get('nome')?.value || 'Preview da imagem'" />
               } @else {
                 <div class="image-placeholder">
                   <mat-icon>image</mat-icon>
@@ -43,7 +43,7 @@
             <div class="image-upload-content">
               <div class="image-upload-copy">
                 <h3>Imagem do Produto</h3>
-                <p>Envie PNG, JPG ou WEBP com até {{ tamanhoMaximoImagemMb }}MB.</p>
+                <p>Envie PNG, JPG ou WEBP com ate {{ tamanhoMaximoImagemMb }}MB.</p>
                 @if (temNovaImagemSelecionada()) {
                   <span class="image-status">Nova imagem pronta para upload</span>
                 } @else if (editando?.imagemUrl) {
@@ -86,23 +86,83 @@
             </div>
           </div>
 
-          <mat-form-field appearance="outline" class="col-span-2">
+          <mat-form-field appearance="outline" class="full-span">
             <mat-label>Nome do Produto</mat-label>
-            <input matInput formControlName="nome" placeholder="Ex: Teclado Mecânico RGB" />
+            <input matInput formControlName="nome" placeholder="Ex: Teclado mecanico RGB" />
             <mat-icon matPrefix>inventory_2</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Código de Barras (EAN)</mat-label>
+            <mat-label>SKU</mat-label>
+            <input matInput formControlName="sku" placeholder="Ex: TEC-RGB-001" />
+            <mat-icon matPrefix>tag</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Codigo de Barras</mat-label>
             <input matInput formControlName="codigoBarras" placeholder="Opcional" />
             <mat-icon matPrefix>qr_code_scanner</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Quantidade em Estoque</mat-label>
-            <input matInput type="number" formControlName="estoque" />
-            <mat-icon matPrefix>numbers</mat-icon>
+            <mat-label>Unidade</mat-label>
+            <input matInput formControlName="unidadeMedida" placeholder="UN, CX, KG..." />
+            <mat-icon matPrefix>straighten</mat-icon>
           </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Preco de Custo</mat-label>
+            <input matInput type="number" step="0.01" formControlName="precoCusto" />
+            <mat-icon matPrefix>payments</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Preco de Venda</mat-label>
+            <input matInput type="number" step="0.01" formControlName="precoVenda" />
+            <mat-icon matPrefix>sell</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Preco Atacado</mat-label>
+            <input matInput type="number" step="0.01" formControlName="precoVendaAtacado" />
+            <mat-icon matPrefix>local_offer</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estoque Atual</mat-label>
+            <input matInput type="number" step="0.01" formControlName="estoqueAtual" />
+            <mat-icon matPrefix>inventory</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estoque Minimo</mat-label>
+            <input matInput type="number" step="0.01" formControlName="estoqueMinimo" />
+            <mat-icon matPrefix>warning</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estoque Maximo</mat-label>
+            <input matInput type="number" step="0.01" formControlName="estoqueMaximo" />
+            <mat-icon matPrefix>warehouse</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-span">
+            <mat-label>Descricao</mat-label>
+            <textarea
+              matInput
+              rows="4"
+              formControlName="descricao"
+              placeholder="Detalhes tecnicos, observacoes ou composicao"
+            ></textarea>
+            <mat-icon matPrefix>description</mat-icon>
+          </mat-form-field>
+
+          <div class="toggle-grid full-span">
+            <mat-checkbox formControlName="ativo">Produto ativo</mat-checkbox>
+            <mat-checkbox formControlName="permiteVendaSemEstoque">
+              Permite venda sem estoque
+            </mat-checkbox>
+          </div>
 
           <div class="form-footer">
             <button mat-button type="button" (click)="fecharFormulario()" [disabled]="salvando">
@@ -117,9 +177,7 @@
               @if (salvando) {
                 <mat-spinner diameter="20"></mat-spinner>
               } @else {
-                <ng-container>
-                  <span>{{ editando ? 'Atualizar Produto' : 'Salvar Produto' }}</span>
-                </ng-container>
+                <span>{{ editando ? 'Atualizar Produto' : 'Salvar Produto' }}</span>
               }
             </button>
           </div>
@@ -131,7 +189,7 @@
   @if (carregando) {
     <div class="state-display">
       <mat-spinner diameter="40"></mat-spinner>
-      <p>Sincronizando estoque...</p>
+      <p>Sincronizando produtos...</p>
     </div>
   } @else {
     <mat-card class="table-card">
@@ -140,14 +198,14 @@
           <div class="icon-circle">
             <mat-icon>inventory</mat-icon>
           </div>
-          <h3>Estoque Vazio</h3>
-          <p>Não há produtos vinculados a esta empresa.</p>
+          <h3>Nenhum produto cadastrado</h3>
+          <p>Crie seu primeiro item para comecar a controlar o estoque.</p>
         </div>
       } @else {
         <div class="table-container">
           <table mat-table [dataSource]="produtos" class="modern-table">
             <ng-container matColumnDef="nome">
-              <th mat-header-cell *matHeaderCellDef>Descrição</th>
+              <th mat-header-cell *matHeaderCellDef>Produto</th>
               <td mat-cell *matCellDef="let p" class="name-cell">
                 <div class="product-main-info">
                   <div class="table-image" [class.has-image]="!!p.imagemUrl">
@@ -160,33 +218,49 @@
 
                   <div>
                     <span class="p-name">{{ p.nome }}</span>
-                    <span class="p-version">v{{ p.versao || 1 }}</span>
+                    <span class="p-version">{{ p.unidadeMedida }} • v{{ p.versao || 1 }}</span>
                   </div>
                 </div>
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="codigoBarras">
-              <th mat-header-cell *matHeaderCellDef>Código/EAN</th>
+            <ng-container matColumnDef="sku">
+              <th mat-header-cell *matHeaderCellDef>SKU</th>
               <td mat-cell *matCellDef="let p">
-                <code class="barcode-text">{{ p.codigoBarras || 'SEM CÓDIGO' }}</code>
+                <code class="barcode-text">{{ p.sku }}</code>
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="estoque">
-              <th mat-header-cell *matHeaderCellDef>Saldo</th>
+            <ng-container matColumnDef="precoVenda">
+              <th mat-header-cell *matHeaderCellDef>Venda</th>
               <td mat-cell *matCellDef="let p">
-                <div class="stock-badge" [class.low-stock]="p.estoque < 10">
-                  <mat-icon>{{ p.estoque < 10 ? 'warning' : 'check_circle' }}</mat-icon>
-                  <span>{{ p.estoque }} un</span>
+                <div class="price-stack">
+                  <strong>{{ p.precoVenda | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+                  @if (p.precoVendaAtacado) {
+                    <span>Atacado: {{ p.precoVendaAtacado | currency: 'BRL' : 'symbol' : '1.2-2' }}</span>
+                  }
                 </div>
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="versao">
+            <ng-container matColumnDef="estoqueAtual">
+              <th mat-header-cell *matHeaderCellDef>Estoque</th>
+              <td mat-cell *matCellDef="let p">
+                <div class="stock-badge" [class.low-stock]="p.statusEstoque === 'ESTOQUE_BAIXO' || p.statusEstoque === 'EM_RUPTURA'">
+                  <mat-icon>
+                    {{ p.statusEstoque === 'ESTOQUE_BAIXO' || p.statusEstoque === 'EM_RUPTURA' ? 'warning' : 'check_circle' }}
+                  </mat-icon>
+                  <span>{{ p.estoqueAtual }} {{ p.unidadeMedida }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let p">
-                <span class="status-chip active">Ativo</span>
+                <span class="status-chip" [ngClass]="getStatusEstoqueClasse(p)">
+                  {{ getStatusEstoqueLabel(p) }}
+                </span>
               </td>
             </ng-container>
 
