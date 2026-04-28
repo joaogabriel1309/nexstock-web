@@ -11,7 +11,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
 import { UsuarioResponse } from '../../models/models';
 import { TokenService } from '../../services/token.service';
 import { UsuarioService } from '../../services/usuario.service';
@@ -42,14 +41,13 @@ export class Usuario implements OnInit {
   salvando = false;
   formularioVisivel = false;
   form: FormGroup;
-  colunas: string[] = ['nome', 'email', 'role', 'acoes', 'dispositivos'];
+  colunas: string[] = ['nome', 'email', 'role', 'acoes'];
 
   constructor(
     private usuarioService: UsuarioService,
     private tokenService: TokenService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
-    private router: Router,
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required]],
@@ -120,10 +118,6 @@ export class Usuario implements OnInit {
         this.salvando = false;
       },
     });
-  }
-
-  irParaDispositivos(usuario: UsuarioResponse): void {
-    this.router.navigate(['/usuarios', usuario.id, 'dispositivos']);
   }
 
   deletar(usuario: UsuarioResponse): void {

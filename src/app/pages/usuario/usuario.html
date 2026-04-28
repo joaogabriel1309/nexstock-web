@@ -122,21 +122,6 @@
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="dispositivos">
-              <th mat-header-cell *matHeaderCellDef>Acesso Mobile</th>
-              <td mat-cell *matCellDef="let u">
-                <button
-                  mat-button
-                  class="btn-devices"
-                  (click)="irParaDispositivos(u)"
-                  matTooltip="Ver aparelhos autorizados"
-                >
-                  <mat-icon>smartphone</mat-icon>
-                  <span>Dispositivos</span>
-                </button>
-              </td>
-            </ng-container>
-
             <ng-container matColumnDef="acoes">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let u" class="actions-cell">
