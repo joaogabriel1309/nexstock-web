@@ -19,22 +19,42 @@ export interface ProdutoResponse {
   id: string;
   empresaId: string;
   nome: string;
+  sku: string;
   codigoBarras?: string;
-  estoque: number;
+  descricao?: string;
+  unidadeMedida: string;
+  precoCusto: number;
+  precoVenda: number;
+  precoVendaAtacado?: number;
+  estoqueAtual: number;
+  estoqueMinimo: number;
+  estoqueMaximo?: number;
+  ativo: boolean;
+  permiteVendaSemEstoque: boolean;
+  margemValor?: number;
+  margemPercentual?: number;
+  statusEstoque?: string;
   imagemUrl?: string;
   imagemKey?: string;
   atualizadoEm: string;
   versao: number;
-  dispositivoUltimaAlteracaoId?: string;
-  deletado?: boolean;
   deletadoEm?: string;
 }
 export interface ProdutoRequest {
   nome: string;
+  sku: string;
   codigoBarras?: string;
-  estoque: number;
+  descricao?: string;
+  unidadeMedida: string;
+  precoCusto: number;
+  precoVenda: number;
+  precoVendaAtacado?: number;
+  estoqueAtual: number;
+  estoqueMinimo: number;
+  estoqueMaximo?: number;
+  ativo: boolean;
+  permiteVendaSemEstoque: boolean;
   empresaId: string;
-  dispositivoId?: string;
 }
 
 export interface ProdutoImagemResponse {
